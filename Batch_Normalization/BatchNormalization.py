@@ -3,6 +3,7 @@ import torch
 from torch import nn
 
 
+
 # 自己实现
 def bn_process(feature, mean, var):
     feature_shape = feature.shape
