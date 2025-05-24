@@ -4,9 +4,9 @@ from torch import nn
 
 class AlexNet(nn.Module):
     def __init__(self, num_classes=1000, init_weigths=False):
-        super().__init__(AlexNet, self)
+        super(AlexNet, self).__init__()
         self.features = nn.Sequential(
-            nn.Conv2d(3, 96, kernel_size=11, stride=4, padding=(1, 2)),
+            nn.Conv2d(3, 96, kernel_size=11, stride=4, padding=2),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
             nn.Conv2d(96, 256, kernel_size=5, stride=1, padding=(2, 2)),
@@ -29,6 +29,8 @@ class AlexNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(2048, num_classes),
         )
+        if init_weigths:
+            self._initialize_weights()
 
     def forward(self, x):
         x = self.features(x)

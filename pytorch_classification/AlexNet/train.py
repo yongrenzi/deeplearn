@@ -25,8 +25,7 @@ def main():
                                    transforms.ToTensor(),
                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])}
 
-    data_root = ""
-    image_path = "D:\Code_python\deeplearn_data\\vision_transformer\\flower_photos"
+    image_path = r"D:\Code_python\deeplearn_data\image_data"
     train_dataset = datasets.ImageFolder(root=os.path.join(image_path, "train"),
                                          transform=date_transform['train'])
     train_num = len(train_dataset)

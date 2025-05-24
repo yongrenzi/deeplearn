@@ -1,27 +1,27 @@
 import os
 import json
-
 import torch
 from PIL import Image
+import matplotlib
 from torchvision import transforms
 import matplotlib.pyplot as plt
-
+matplotlib.use('Agg')  # 使用非交互式后端
 from model import AlexNet
-
 
 def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    date_transform = transforms.Compose(
+    data_transform = transforms.Compose(
         [transforms.Resize((224, 224)),
          transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-    img_path = ""
+    img_path = r"D:\Code_python\deeplearn_data\image_data\flower_photos\tulips\10791227_7168491604.jpg"
     assert os.path.exists(img_path), "file: '{}' dose not exist".format(img_path)
     img = Image.open(img_path)
 
     plt.imshow(img)
+    img=data_transform(img)
     img = torch.unsqueeze(img, dim=0)
 
     json_path = "./class_indices.json"
@@ -36,7 +36,7 @@ def main():
     # load model weights
     weights_path = './AlexNet.pth'
     assert os.path.exists(weights_path), "file: '{}' dose not exist.".format(weights_path)
-    model.load_state_dict(torch.load(weights_path))
+    model.load_state_dict(torch.load(weights_path,weights_only=True))
 
     model.eval()
     with torch.no_grad():
