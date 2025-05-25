@@ -2,13 +2,11 @@
 
 ### 1 ResNet 网络结构
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521155107617.png" alt="image-20250521155107617" style="zoom:60%;" />
+![image1.png](image%2Fimage1.png)
 
 **34-layers模型简图**
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521154944774.png" alt="image-20250521154944774" style="zoom:60%;" />
-
-
+![image2.png](image%2Fimage2.png)
 
 ### 2 ResNet 的优点
 
@@ -23,14 +21,14 @@ ResNet网络亮点：
 
 下图是论文中两种残差结构，左边的残差结构针对的是层数较少的网络，右边的残差结构指的是层数较深的网路。对于一个channel为256的特征矩阵，右侧残差结构需要的参数明显小于左侧残差结构。
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521160139743.png" alt="image-20250521160139743" style="zoom:60%;" />
+![image3.png](image%2Fimage3.png)
 
 另外对于网络中的虚线曲线：
 
 - 浅层网络：
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521160821067.png" alt="image-20250521160821067" style="zoom:60%;" />
+![image4.png](image%2Fimage4.png)
 
 - 深层网络：
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521160859913.png" alt="image-20250521160859913" style="zoom:60%;" />
+![image5.png](image%2Fimage5.png)
