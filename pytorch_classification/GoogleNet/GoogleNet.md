@@ -2,16 +2,12 @@
 
 ### 1 GoogleNet 模型结构
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250524164819458.png" alt="image-20250524164819458" style="zoom:60%;" />
+![image1.png](image%2Fimage1.png)
 
 
+![image2.png](image%2Fimage2.png)
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250524160853967.png" alt="image-20250524160853967" style="zoom:60%;" />
-
-
-
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250524165016631.png" alt="image-20250524165016631" style="zoom:60%;" />
-
+![image3png](image%2Fimage3.png)
 ### 2 GoogleNet 网络的亮点
 
 - 引入了Inception结构（融合不同尺度的特征信息）
