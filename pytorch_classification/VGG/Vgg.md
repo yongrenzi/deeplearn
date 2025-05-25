@@ -2,11 +2,11 @@
 
 ### 1 Vgg 网络结构
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521145726332.png" alt="image-20250521145726332" style="zoom:60%;" />
+![image1.png](image/image1.png)
 
 最常使用的是VGG16
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521151000192.png" alt="image-20250521151000192" style="zoom:60%;" />
+![image2.png](image/image2.png)
 
 相比Alexnet ，VGG使用了更深的网络结构，证明了增加网络深度能够在一定程度上影响网络性能。
 
@@ -25,14 +25,14 @@ LRN：局部归一化
 ##### 计算公式
 
 经过卷积核之后，图像的大小
-![img.png](img.png)
+![img.png](image/img.png)
 
 所以感受野的计算公式为
-![img_1.png](img_1.png)
+![img_1.png](image/img_1.png)
 
 > 论文中提到，可以通过堆叠两个3x3的卷积核替代5x5的卷积核，堆叠三个3x3的卷积核替代7x7的卷积核。
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521153757932.png" alt="image-20250521153757932" style="zoom:60%;" />
+![image3.png](image/image3.png)
 
 ##### 2.1 计算量
 
