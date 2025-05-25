@@ -1,7 +1,7 @@
 ## AlexNet
 ### 1 AlexNet 网络结构
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250522135554710.png" alt="image-20250522135554710" style="zoom:60%;" />
+![image1.png](image%2Fimage1.png)
 
 ```py
 conv1  224 x 224 x 3   kernel_size=11   stride=4    padding=[1,2]     55 x 55 x 96
@@ -13,8 +13,7 @@ conv4  13 x 13 x 384   kernel_size=3    stride=1    padding=1         13 x 13 x 
 conv5  13 x 13 x 384   kernel_size=3    stride=1    padding=1         13 x 13 x 256
 pool3  13 x 13 x 256   kernel_size=3    stride=2                       6 x 6 x 256
 ```
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250522171920961.png" alt="image-20250522171920961" style="zoom:60%;" />
-
+![image2.png](image%2Fimage2.png)
 ### 2 AlexNet 的优点
 
 - 首次利用GPU进行网络加速训练
