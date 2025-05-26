@@ -6,15 +6,11 @@
 
 **具体公式如下：**
 
-
-
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521165424382.png" alt="image-20250521165424382" style="zoom:60%;" />
+![image1.png](image/image1.png)
 
 **示例如下：**
 
-
-
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521165622856.png" alt="image-20250521165622856" style="zoom:60%;" />
+![image2.png](image/image2.png)
 
 **注意**：
 
@@ -27,7 +23,7 @@
 
 ##### 2.3.1 对比
 
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250521202113210.png" alt="image-20250521202113210" style="zoom:60%;" />
+![image3.png](image/image3.png)
 
 ##### 2.3.2为什么时序特征用LN而不用BN
 
