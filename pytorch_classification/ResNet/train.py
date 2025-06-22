@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import transforms, datasets
 from tqdm import tqdm
-from model import resnet34
+from pytorch_classification.ResNeXt.model import resnet34
 
 
 def main():
@@ -23,9 +23,10 @@ def main():
                                    transforms.ToTensor(),
                                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])}
 
-    data_root = os.path.abspath(os.path.join(os.getcwd(), "../../.."))  # get data root path
-    image_path = os.path.join(data_root, "data_set", "flower_data")  # flower data set path
-    assert os.path.exists(image_path), "{} path does not exist.".format(image_path)
+    # data_root = os.path.abspath(os.path.join(os.getcwd(), "../../.."))  # get data root path
+    # image_path = os.path.join(data_root, "data_set", "flower_data")  # flower data set path
+    # assert os.path.exists(image_path), "{} path does not exist.".format(image_path)
+    image_path = r"D:\Code_python\deeplearn_data\image_data"
     train_dataset = datasets.ImageFolder(root=os.path.join(image_path, "train"),
                                          transform=data_transform["train"])
     train_num = len(train_dataset)

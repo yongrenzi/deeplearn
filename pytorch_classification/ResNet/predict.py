@@ -6,7 +6,7 @@ from PIL import Image
 from torchvision import transforms
 import matplotlib.pyplot as plt
 
-from model import resnet34
+from pytorch_classification.ResNeXt.model import resnet34
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
          transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
     # load image
-    img_path = "../tulip.jpg"
+    img_path = r"D:\Code_python\deeplearn_data\image_data\flower_photos\tulips\10791227_7168491604.jpg"
     assert os.path.exists(img_path), "file: '{}' dose not exist.".format(img_path)
     img = Image.open(img_path)
     plt.imshow(img)
