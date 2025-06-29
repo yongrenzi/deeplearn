@@ -4,6 +4,7 @@ import torch
 
 class BasicBlock(nn.Module):
     expansion = 1
+
     def __init__(self, in_channel, out_channel, stride=1, downsample=None, **kwargs):
         super(BasicBlock, self).__init__()
         self.conv1 = nn.Conv2d(in_channels=in_channel, out_channels=out_channel,
@@ -55,9 +56,9 @@ class Bottleneck(nn.Module):
                                kernel_size=3, stride=stride, bias=False, padding=1)
         self.bn2 = nn.BatchNorm2d(width)
         # -----------------------------------------
-        self.conv3 = nn.Conv2d(in_channels=width, out_channels=out_channel*self.expansion,
+        self.conv3 = nn.Conv2d(in_channels=width, out_channels=out_channel * self.expansion,
                                kernel_size=1, stride=1, bias=False)  # unsqueeze channels
-        self.bn3 = nn.BatchNorm2d(out_channel*self.expansion)
+        self.bn3 = nn.BatchNorm2d(out_channel * self.expansion)
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
 
@@ -94,7 +95,7 @@ class ResNet(nn.Module):
                  width_per_group=64):
         super(ResNet, self).__init__()
         self.include_top = include_top
-        #maxpool之后的通道的个数是64
+        # maxpool之后的通道的个数是64
         self.in_channel = 64
         self.groups = groups
         self.width_per_group = width_per_group
@@ -104,7 +105,7 @@ class ResNet(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         self.layer1 = self._make_layer(block, 64, blocks_num[0])
-        #下采样层if语句都会满足
+        # 下采样层if语句都会满足
         self.layer2 = self._make_layer(block, 128, blocks_num[1], stride=2)
         self.layer3 = self._make_layer(block, 256, blocks_num[2], stride=2)
         self.layer4 = self._make_layer(block, 512, blocks_num[3], stride=2)
@@ -118,14 +119,14 @@ class ResNet(nn.Module):
 
     def _make_layer(self, block, channel, block_num, stride=1):
         downsample = None
-        #18和34的第一层会跳过这个if语句
+        # 18和34的第一层会跳过这个if语句
         if stride != 1 or self.in_channel != channel * block.expansion:
             downsample = nn.Sequential(
                 nn.Conv2d(self.in_channel, channel * block.expansion, kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm2d(channel * block.expansion))
 
         layers = []
-        #channel 残差结构主分支第一个卷积层的卷积个数
+        # channel 残差结构主分支第一个卷积层的卷积个数
         layers.append(block(self.in_channel,
                             channel,
                             downsample=downsample,
@@ -133,7 +134,7 @@ class ResNet(nn.Module):
                             groups=self.groups,
                             width_per_group=self.width_per_group))
         self.in_channel = channel * block.expansion
-        #这里不用传入downsample参数
+        # 这里不用传入downsample参数
         for _ in range(1, block_num):
             layers.append(block(self.in_channel,
                                 channel,
