@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 # 读取mask标签
-target = Image.open("./2007_001288.png")
+target = Image.open(r"D:\Code_python\deeplearn_data\pacal_voc\VOCdevkit\VOC2012\JPEGImages\2007_002088.jpg")
 # 获取调色板
 palette = target.getpalette()
 palette = np.reshape(palette, (-1, 3)).tolist()

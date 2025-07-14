@@ -77,6 +77,3 @@ def main():
         mask.putpalette(pallette)
         mask.save("test_result.png")
 
-
-if __name__ == '__main__':
-    main()

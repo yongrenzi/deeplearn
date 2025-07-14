@@ -4,7 +4,7 @@ import datetime
 
 import torch
 
-from src import fcn_resnet50
+from fcn_model import fcn_resnet50
 from train_utils import train_one_epoch, evaluate, create_lr_scheduler, init_distributed_mode, save_on_master, mkdir
 from my_dataset import VOCSegmentation
 import transforms as T

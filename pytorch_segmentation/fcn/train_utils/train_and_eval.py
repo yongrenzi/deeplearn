@@ -1,6 +1,7 @@
 import torch
 from torch import nn
-import distributed_utils as utils
+
+from pytorch_segmentation.fcn.train_utils import distributed_utils as utils
 
 
 def criterion(inputs, target):

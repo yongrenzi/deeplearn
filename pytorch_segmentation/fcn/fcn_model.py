@@ -58,7 +58,9 @@ class FCN(nn.Module):
     def forward(self, x: Tensor) -> Dict[str, Tensor]:
         input_shape = x.shape[-2:]
         feature = self.backbone(x)
+        # print(f"backbone================================>{self.backbone}")
         result = OrderedDict()
+        # print(f"feature================================>{feature}")
         x = feature["out"]
         x = self.classifier(x)
         x = F.interpolate(x, size=input_shape, mode='bilinear', align_corners=False)

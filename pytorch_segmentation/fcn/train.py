@@ -1,10 +1,9 @@
 import os
 import time
 import datetime
-
 import torch
 
-from src import fcn_resnet50
+from fcn_model import fcn_resnet50
 from train_utils import train_one_epoch, evaluate, create_lr_scheduler
 from my_dataset import VOCSegmentation
 import transforms as T
@@ -52,7 +51,7 @@ def create_model(aux, num_classes, pretrain=True):
     model = fcn_resnet50(aux=aux, num_classes=num_classes)
 
     if pretrain:
-        weights_dict = torch.load("./fcn_resnet50_coco.pth", map_location='cpu')
+        weights_dict = torch.load(r"D:\Code_python\deeplearn\pytorch_segmentation\fcn\pretrain_model\fcn_resnet50_coco.pth", map_location='cpu')
 
         if num_classes != 21:
             # 官方提供的预训练权重是21类(包括背景)
@@ -77,6 +76,7 @@ def main(args):
 
     # 用来保存训练以及验证过程中信息
     results_file = "results{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+
 
     # VOCdevkit -> VOC2012 -> ImageSets -> Segmentation -> train.txt
     train_dataset = VOCSegmentation(args.data_path,
@@ -169,7 +169,8 @@ def parse_args():
     import argparse
     parser = argparse.ArgumentParser(description="pytorch fcn training")
 
-    parser.add_argument("--data-path", default="/data/", help="VOCdevkit root")
+    parser.add_argument("--data-path", default="D:\\Code_python\\deeplearn_data\\pacal_voc",
+                        help="VOCdevkit root")
     parser.add_argument("--num-classes", default=20, type=int)
     parser.add_argument("--aux", default=True, type=bool, help="auxilier loss")
     parser.add_argument("--device", default="cuda", help="training device")
