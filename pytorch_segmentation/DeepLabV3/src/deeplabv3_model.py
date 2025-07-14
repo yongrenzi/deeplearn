@@ -1,11 +1,10 @@
-import fontTools.varLib.interpolatablePlot
 import torch
 import torch.nn as nn
 from torch import Tensor
 from torch.nn import functional as F
 from typing import Dict, List
 
-from resnet_backbone import resnet50
+from .resnet_backbone import resnet50
 from collections import OrderedDict
 
 
@@ -24,8 +23,8 @@ class IntermediateLayerGetter(nn.ModuleDict):
                 del return_layers[name]
             if not return_layers:
                 break
-        super(IntermediateLayerGetter, self).__init__()
-        self.return_layers = return_layers
+        super(IntermediateLayerGetter, self).__init__(layers)
+        self.return_layers = orig_return_layers
 
     def forward(self, x: Tensor) -> Dict[str, Tensor]:
         out = OrderedDict()
@@ -114,28 +113,30 @@ class DeepLabHead(nn.Sequential):
 
 
 class DeepLabV3(nn.Module):
-    def __init__(self,backbone,classifier,aux_classifier=None):
-        super(DeepLabHead, self).__init__()
-        self.backbone=backbone
-        self.classifier=classifier
-        self.aux_classifier=aux_classifier
+    def __init__(self, backbone, classifier, aux_classifier=None):
+        super(DeepLabV3, self).__init__()
+        self.backbone = backbone
+        self.classifier = classifier
+        self.aux_classifier = aux_classifier
 
-    def forward(self,x:Tensor)->Dict[str,Tensor]:
-        inpu_shape=x.shape[-2:]
-        feature=self.backbone(x)
-        result=OrderedDict()
-        x=feature['out']
-        x=self.classifier(x)
-        x=F.interpolate(x,size=inpu_shape,mode='bilinear',align_corners=False)
-        result['out']=x
+    def forward(self, x: Tensor) -> Dict[str, Tensor]:
+        input_shape = x.shape[-2:]
+        feature = self.backbone(x)
+        result = OrderedDict()
+        x = feature['out']
+        x = self.classifier(x)
+        x = F.interpolate(x, size=input_shape, mode='bilinear', align_corners=False)
+        result['out'] = x
 
         if self.aux_classifier is not None:
-            x=feature["aux"]
-            x=self.aux_classifier(x)
-            x=F.interpolate(x,size=inpu_shape,mode="bilinear",align_corners=False)
-            result['aux']=x
+            x = feature["aux"]
+            x = self.aux_classifier(x)
+            x = F.interpolate(x, size=input_shape, mode="bilinear", align_corners=False)
+            result['aux'] = x
 
         return result
+
+
 def deeplabv3_resnet50(aux, num_classes=21, pretrain_backbone=False):
     backbone = resnet50(replace_stride_with_dilation=[False, True, True])
     if pretrain_backbone:
@@ -154,3 +155,5 @@ def deeplabv3_resnet50(aux, num_classes=21, pretrain_backbone=False):
     classifier = DeepLabHead(out_inplanes, num_classes)
     model = DeepLabV3(backbone, classifier, aux_classifier)
     return model
+
+
