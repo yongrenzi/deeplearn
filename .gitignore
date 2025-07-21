@@ -1,0 +1,8 @@
+*.pkl
+*.model
+*,pt
+*.pth
+*.bin
+*.ckpt
+*.onnx
+*.zip
