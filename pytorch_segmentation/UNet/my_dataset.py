@@ -13,14 +13,15 @@ class DriveDataset(Dataset):
         data_root = os.path.join(root, "DRIVE", self.flag)
         assert os.path.exists(data_root), f"path {data_root} is not exists."
         self.transforms = transforms
-        img_names = [i for i in os.listdir(os.path.join(data_root, "images")) if i.endswith(".gif")]
-        self.img_list = [os.path.join(data_root, "image", i) for i in img_names]
+        img_names = [i for i in os.listdir(os.path.join(data_root, "images")) if i.endswith(".tif")]
+        self.img_list = [os.path.join(data_root, "images", i) for i in img_names]
         self.manual = [os.path.join(data_root, "1st_manual", i.split("_")[0] + "_manual1.gif") for i in img_names]
-        self.roi_mask = [os.path.join(data_root, "mask", i.split("_")[0] + f"_{self.flag}_mask.git") for i in img_names]
+        self.roi_mask = [os.path.join(data_root, "mask", i.split("_")[0] + f"_{self.flag}_mask.gif") for i in img_names]
         # ”D:\Code_python\deeplearn_data\DRIVE\training\images\21_training.tif“
         # ”D:\Code_python\deeplearn_data\DRIVE\training\1st_manual\21_manual1.gif“
         # "D:\Code_python\deeplearn_data\DRIVE\training\mask\21_training_mask.gif"
         # check file
+
         for i in self.manual:
             if os.path.exists(i) is False:
                 raise FileNotFoundError(f"file{i} is not found")
@@ -53,7 +54,7 @@ class DriveDataset(Dataset):
         images, targets = list(zip(*batch))
         batched_img = cat_list(images, fill_value=0)
         batched_targets = cat_list(targets, fill_value=255)
-        return batched_img,
+        return batched_img,batched_targets
 
 
 def cat_list(images, fill_value=0):
@@ -63,3 +64,10 @@ def cat_list(images, fill_value=0):
     for img, pad_img in zip(images, batched_imgs):
         pad_img[..., :img.shape[-2], :img.shape[-1]].copy_(img)
     return batched_imgs
+
+
+
+# train_dataset = DriveDataset(root=r"D:\Code_python\deeplearn_data",
+#                              transforms=None,
+#                              train=True)
+# print(len(train_dataset))
