@@ -43,7 +43,7 @@ def main(args):
                                                  collate_fn=val_dataset.collate_fn)
 
 
-    model=deeplabv3_resnet50(aux=True,num_classes=num_classes,pretrain_backbone=FalseP)
+    model=deeplabv3_resnet50(aux=True,num_classes=num_classes,pretrain_backbone=False)
     model.load_state_dict(torch.load(args.weights,map_location=device)['model'])
     model.to(device)
 
