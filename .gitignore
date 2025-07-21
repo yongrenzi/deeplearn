@@ -6,3 +6,4 @@
 *.ckpt
 *.onnx
 *.zip
+__pycache__/
