@@ -7,3 +7,4 @@
 *.onnx
 *.zip
 __pycache__/
+.idea/
