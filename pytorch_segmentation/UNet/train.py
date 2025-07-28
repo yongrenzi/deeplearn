@@ -1,4 +1,4 @@
-# from .transforms import RandomCrop, RandomResie, RandomHorizontalFlip, RandomVerticalFlip, ToTensor, Normalize, Compose
+# from transforms import RandomCrop, RandomResie, RandomHorizontalFlip, RandomVerticalFlip, ToTensor, Normalize, Compose
 import datetime
 import os
 import time
@@ -12,7 +12,7 @@ import transforms as T
 
 
 # class SegmentationPresetTrain:
-#     def __init__(self, base_size, crop_size, hflip_prob, vflip_prob, mean=(0.485, 0.456, 0.406),
+#     def __init__(self, base_size, crop_size, hflip_prob=0.5, vflip_prob=0.5, mean=(0.485, 0.456, 0.406),
 #                  std=(0.229, 0.224, 0.225)):
 #         min_size = int(0.5 * base_size)
 #         max_size = int(1.2 * base_size)
@@ -22,7 +22,7 @@ import transforms as T
 #             trans.append(RandomHorizontalFlip(hflip_prob))
 #         if vflip_prob > 0:
 #             trans.append(RandomVerticalFlip(vflip_prob))
-#         trans.append([
+#         trans.extend([
 #             RandomCrop(crop_size),
 #             ToTensor(),
 #             Normalize(mean=mean, std=std)
@@ -114,8 +114,8 @@ def main(args):
         momentum=args.momentum,
         weight_decay=args.weight_decay
     )
-    if __name__ == '__main__':
-        scaler = torch.cuda.amp.GradScaler() if args.amp else None
+
+    scaler = torch.cuda.amp.GradScaler() if args.amp else None
 
     lr_scheduler = create_lr_scheduler(optimizer, len(train_dataloader), args.epochs, warmup=True)
 
@@ -164,7 +164,7 @@ def main(args):
         if args.amp:
             save_file["scaler"] = scaler.state_dict()
         if args.save_best is True:
-            torch.save(save_file, "save_weights/best_model.pth")
+            torch.save(save_file, "save_weights/best_amp_50_model.pth")
         else:
             torch.save(save_file, "save_weights/model_{}.pth".format(epoch))
 
@@ -195,7 +195,7 @@ def parse_args():
                         help='start epoch')
     parser.add_argument('--save-best', default=True, type=bool, help='only save best dice weights')
     # Mixed precision training parameters
-    parser.add_argument("--amp", default=False, type=bool,
+    parser.add_argument("--amp", default=True, type=bool,
                         help="Use torch.cuda.amp for mixed precision training")
 
     args = parser.parse_args()
