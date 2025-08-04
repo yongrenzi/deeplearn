@@ -1,4 +1,4 @@
-*.pkl
+git *.pkl
 *.model
 *,pt
 *.pth
