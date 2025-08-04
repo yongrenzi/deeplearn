@@ -147,6 +147,7 @@ class Inception(nn.Module):
         x3 = self.branch3(x)
         x4 = self.branch4(x)
         x = [x1, x2, x3, x4]
+        
         return torch.cat(x, dim=1)
 
 
