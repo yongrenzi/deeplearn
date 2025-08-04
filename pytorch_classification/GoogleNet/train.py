@@ -1,15 +1,16 @@
-import torch
+import datetime
+import json
 import os
 import sys
-import json
+import time
+
+import torch
 import torch.nn as nn
-from torchvision import transforms, datasets, utils
-import matplotlib.pyplot as plt
-import numpy as np
 import torch.optim as optim
+from torchvision import transforms, datasets
 from tqdm import tqdm
 
-from model import GoogleNet
+from model import GoogleNet,SE_GoogleNet
 
 
 def main(aux_logits):
@@ -53,16 +54,20 @@ def main(aux_logits):
     print("using {} images for training, {} images for validation.".format(train_num,
                                                                            val_num))
 
-
+    # net = SE_GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
     net = GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
     net.to(device)
     loss_function = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=0.0002)
 
-    epochs = 10
+    epochs = 30
+    # save_path = './SE_GoogleNet.pth'
+    # save_file = "SE_GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     save_path = './GoogleNet.pth'
+    save_file = "GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     best_acc = 0.0
     train_steps = len(train_loader)
+    start_time = time.time()
     for epoch in range(epochs):
         net.train()
         running_loss = 0.0
@@ -92,10 +97,16 @@ def main(aux_logits):
         val_accurate = acc / val_num
         print('[epoch %d] train_loss: %.3f  val_accuracy: %.3f' %
               (epoch + 1, running_loss / train_steps, val_accurate))
-
+        with open(save_file, 'a') as f:
+            write_info = f"epoch:{epoch}, mean_loss:{running_loss / train_steps}, val_accurate:{val_accurate} \n"
+            f.write(write_info)
         if val_accurate > best_acc:
             best_acc = val_accurate
             torch.save(net.state_dict(), save_path)
+    end_time = time.time()
+    with open(save_file, 'a') as f:
+        write_info = f"running time:{end_time - start_time}"
+        f.write(write_info)
     print('Finished Training')
 
 
@@ -103,5 +114,5 @@ if __name__ == '__main__':
     # 使用辅助分类器
     # aux_logits=True
     # 不使用辅助分类器
-    aux_logits=False
+    aux_logits = False
     main(aux_logits)
