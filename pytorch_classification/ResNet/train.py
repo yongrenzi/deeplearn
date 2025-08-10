@@ -9,8 +9,9 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import transforms, datasets
 from tqdm import tqdm
-from pytorch_classification.ResNeXt.model import resnet34
-from pytorch_classification.ResNet.model import se_resnet34
+# from pytorch_classification.ResNeXt.model import resnet34
+# from pytorch_classification.ResNet.model import se_resnet34
+from pytorch_classification.ResNet.model import scSE_resnet34
 
 
 def main():
@@ -61,28 +62,29 @@ def main():
     print("using {} images for training, {} images for validation.".format(train_num,
                                                                            val_num))
 
-    net = resnet34()
+    net = scSE_resnet34(Attention="scSE")
     # 若是载入自己训练的模型时，放置在这里
+    # change fc layer structure
+    # in_channel = net.fc.in_features
+    # net.fc = nn.Linear(in_channel, 5)
+    # net.to(device)
+
+    # SE_ResNet
+    # net = se_resnet34()
+
+    # scSE_ResNet
+
+    model_weight_path = "./resnet34-pre.pth"
+    assert os.path.exists(model_weight_path), "file {} does not exist.".format(model_weight_path)
+    net.load_state_dict(torch.load(model_weight_path, map_location='cpu'), strict=False)
+    # for param in net.parameters():
+    #     param.requires_grad = False
+
+    # 若是载入官方weigth时，放置在这里之前
     # change fc layer structure
     in_channel = net.fc.in_features
     net.fc = nn.Linear(in_channel, 5)
     net.to(device)
-
-    # SE_ResNet
-    # net = se_resnet34()
-    # load pretrain weights
-    # download url: https://download.pytorch.org/models/resnet34-333f7ec4.pth
-    model_weight_path = "./resNet34.pth"
-    assert os.path.exists(model_weight_path), "file {} does not exist.".format(model_weight_path)
-    net.load_state_dict(torch.load(model_weight_path, map_location='cpu'))
-    # for param in net.parameters():
-    #     param.requires_grad = False
-
-    # 若是载入官方weigth时，放置在这里
-    # # change fc layer structure
-    # in_channel = net.fc.in_features
-    # net.fc = nn.Linear(in_channel, 5)
-    # net.to(device)
 
     # define loss function
     loss_function = nn.CrossEntropyLoss()
@@ -91,13 +93,16 @@ def main():
     params = [p for p in net.parameters() if p.requires_grad]
     optimizer = optim.Adam(params, lr=0.0001)
 
-    epochs = 20
+    epochs = 60
     best_acc = 0.0
-    save_path = './resNet34_epo50.pth'
-    save_file = "ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    save_path = './scSE_resnet34_new.pth'
+    save_file = "scSE_ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    # save_path = './resnet34.pth'
+    # save_file = "ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     # save_path = './se_resNet34_epo50.pth'
     # save_file = "SE_ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     train_steps = len(train_loader)
+    start_time = time.time()
     for epoch in range(epochs):
         # train
         net.train()
@@ -135,16 +140,19 @@ def main():
 
         val_accurate = acc / val_num
         print('[epoch %d] train_loss: %.3f  val_accuracy: %.3f' %
-              (epoch + 1, running_loss / train_steps, val_accurate))
+              (epoch + 30, running_loss / train_steps, val_accurate))
 
         with open(save_file, 'a') as f:
-            write_info = f"epoch:{epoch + 30},mean_loss:{running_loss / train_steps},val_accurate:{val_accurate} \n"
+            write_info = f"epoch:{epoch+30},mean_loss:{running_loss / train_steps},val_accurate:{val_accurate} \n"
             f.write(write_info)
 
         if val_accurate > best_acc:
             best_acc = val_accurate
             torch.save(net.state_dict(), save_path)
-
+    end_time = time.time()
+    with open(save_file, 'a') as f:
+        write_info = f"running time:{end_time - start_time}"
+        f.write(write_info)
     print('Finished Training')
 
 

@@ -10,7 +10,7 @@ import torch.optim as optim
 from torchvision import transforms, datasets
 from tqdm import tqdm
 
-from model import GoogleNet,SE_GoogleNet
+from model import GoogleNet, SE_GoogleNet, scSE_GoogleNet
 
 
 def main(aux_logits):
@@ -55,18 +55,26 @@ def main(aux_logits):
                                                                            val_num))
 
     # net = SE_GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
-    net = GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
+    # net = GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
+    net = scSE_GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True, Attention="scSE")
     net.to(device)
     loss_function = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=0.0002)
+    # model_weight_path = "./sSE_GoogleNet.pth"
+    # assert os.path.exists(model_weight_path), "file {} does not exist.".format(model_weight_path)
+    # net.load_state_dict(torch.load(model_weight_path, map_location='cpu'), strict=False)
 
-    epochs = 30
+    epochs = 60
+    save_path = './scSE_GoogleNet.pth'
+    save_file = "scSE_GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+
     # save_path = './SE_GoogleNet.pth'
     # save_file = "SE_GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-    save_path = './GoogleNet.pth'
-    save_file = "GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    # save_path = './GoogleNet.pth'
+    # save_file = "GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     best_acc = 0.0
     train_steps = len(train_loader)
+    # print(f"train_steps---->{train_steps}")
     start_time = time.time()
     for epoch in range(epochs):
         net.train()
@@ -81,8 +89,9 @@ def main(aux_logits):
             optimizer.step()
 
             running_loss += loss.item()
+            # print(f"loss.item()----->{loss.item()}")
             train_bar.desc = "train epoch[{}/{}] loss:{:.3f}".format(epoch + 1, epochs, loss)
-
+        # print(f"running_loss-->{running_loss}")
         # validate
         net.eval()
         acc = 0.0
