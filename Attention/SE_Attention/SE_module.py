@@ -1,4 +1,6 @@
+import torch
 import torch.nn as nn
+
 
 class SE_module(nn.Module):
     def __init__(self, in_c, scale=16):
@@ -20,3 +22,9 @@ class SE_module(nn.Module):
         y = self.sigmoid(self.W2(y))  # 输出[b,c]
         y = y.view(b, c, 1, 1)
         return x * y.expand_as(x)
+
+
+# input = torch.rand([8, 3, 480, 480])
+# se_model = SE_module(in_c=3, scale=3)
+# output = se_model(input)
+# print(output.shape)
