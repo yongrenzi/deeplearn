@@ -11,8 +11,8 @@ from torchvision import transforms, datasets
 from tqdm import tqdm
 # from pytorch_classification.ResNeXt.model import resnet34
 # from pytorch_classification.ResNet.model import se_resnet34
-from pytorch_classification.ResNet.model import scSE_resnet34
-
+# from pytorch_classification.ResNet.model import scSE_resnet34
+from pytorch_classification.ResNet.model import CBAM_resnet34
 
 def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -62,17 +62,12 @@ def main():
     print("using {} images for training, {} images for validation.".format(train_num,
                                                                            val_num))
 
-    net = scSE_resnet34(Attention="scSE")
+    net = CBAM_resnet34()
     # 若是载入自己训练的模型时，放置在这里
     # change fc layer structure
     # in_channel = net.fc.in_features
     # net.fc = nn.Linear(in_channel, 5)
     # net.to(device)
-
-    # SE_ResNet
-    # net = se_resnet34()
-
-    # scSE_ResNet
 
     model_weight_path = "./resnet34-pre.pth"
     assert os.path.exists(model_weight_path), "file {} does not exist.".format(model_weight_path)
@@ -95,8 +90,11 @@ def main():
 
     epochs = 60
     best_acc = 0.0
-    save_path = './scSE_resnet34_new.pth'
-    save_file = "scSE_ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+
+    save_path = './CBAM_resnet34_new.pth'
+    save_file = "CBAM_ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    # save_path = './scSE_resnet34_new.pth'
+    # save_file = "scSE_ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     # save_path = './resnet34.pth'
     # save_file = "ResNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     # save_path = './se_resNet34_epo50.pth'
@@ -140,10 +138,10 @@ def main():
 
         val_accurate = acc / val_num
         print('[epoch %d] train_loss: %.3f  val_accuracy: %.3f' %
-              (epoch + 30, running_loss / train_steps, val_accurate))
+              (epoch, running_loss / train_steps, val_accurate))
 
         with open(save_file, 'a') as f:
-            write_info = f"epoch:{epoch+30},mean_loss:{running_loss / train_steps},val_accurate:{val_accurate} \n"
+            write_info = f"epoch:{epoch},mean_loss:{running_loss / train_steps},val_accurate:{val_accurate} \n"
             f.write(write_info)
 
         if val_accurate > best_acc:

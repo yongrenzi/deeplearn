@@ -10,7 +10,7 @@ import torch.optim as optim
 from torchvision import transforms, datasets
 from tqdm import tqdm
 
-from model import GoogleNet, SE_GoogleNet, scSE_GoogleNet
+from model import GoogleNet, SE_GoogleNet, scSE_GoogleNet,CBAM_GoogleNet
 
 
 def main(aux_logits):
@@ -56,7 +56,8 @@ def main(aux_logits):
 
     # net = SE_GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
     # net = GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
-    net = scSE_GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True, Attention="scSE")
+    # net = scSE_GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True, Attention="scSE")
+    net = CBAM_GoogleNet(num_classes=5, aux_logits=aux_logits, init_weights=True)
     net.to(device)
     loss_function = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=0.0002)
@@ -65,9 +66,11 @@ def main(aux_logits):
     # net.load_state_dict(torch.load(model_weight_path, map_location='cpu'), strict=False)
 
     epochs = 60
-    save_path = './scSE_GoogleNet.pth'
-    save_file = "scSE_GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    save_path = './CBAM_GoogleNet.pth'
+    save_file = "CBAM_GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
 
+    # save_path = './scSE_GoogleNet.pth'
+    # save_file = "scSE_GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     # save_path = './SE_GoogleNet.pth'
     # save_file = "SE_GoogleNet_result{}.txt".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     # save_path = './GoogleNet.pth'
